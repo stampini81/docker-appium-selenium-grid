@@ -1,0 +1,26 @@
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: selenium-hub
+    ports:
+      # Mapeia as portas do Grid para a sua máquina local
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  appium-node-1:
+    # Constrói a imagem a partir do Dockerfile na pasta ./appium-node
+    build: ./appium-node
+    # Garante que o Hub inicie antes deste nó
+    depends_on:
+      - selenium-hub
+    # Opcional: bom para debug, permite conectar diretamente neste Appium
+    ports:
+      - "4724:4723" # Mapeia a porta interna 4723 do contêiner para a 4724 da sua máquina
+
+  appium-node-2:
+    build: ./appium-node
+    depends_on:
+      - selenium-hub
+    ports:
+      - "4725:4723" # Mapeia para a porta 4725 da sua máquina

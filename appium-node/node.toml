@@ -1,0 +1,13 @@
+[node]
+# O Hub se conectará a este nó dentro da rede Docker
+hub = "http://selenium-hub:4444"
+detect-drivers = false
+
+[relay]
+# O Appium estará rodando na porta 4723 no mesmo contêiner
+url = "http://localhost:4723"
+status-endpoint = "/status"
+# Define as capabilities que este nó oferece
+configs = [
+    "1", "{\"platformName\": \"Linux\", \"browserName\": \"Chrome\", \"appium:automationName\": \"Chromium\"}"
+]
