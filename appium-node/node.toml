@@ -9,5 +9,5 @@ url = "http://localhost:4723"
 status-endpoint = "/status"
 # Define as capabilities que este nó oferece
 configs = [
-    "1", "{\"platformName\": \"Linux\", \"browserName\": \"Chrome\", \"appium:automationName\": \"Chromium\"}"
+    "1", "{\"platformName\": \"linux\", \"browserName\": \"chrome\", \"appium:automationName\": \"chromium\"}"
 ]

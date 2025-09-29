@@ -1,6 +1,6 @@
 server:
   port: 4723
   default-capabilities:
-    platformName: "Linux"
-    browserName: "Chrome"
-    'appium:automationName': 'Chromium'
+    platformName: "linux"
+    browserName: "chrome"
+    'appium:automationName': 'chromium'

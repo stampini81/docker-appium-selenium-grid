@@ -26,6 +26,9 @@ RUN mkdir -p /root/.appium/node_modules/appium-chromium-driver/node_modules/appi
 # Baixa o Selenium Server
 RUN wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-${SELENIUM_VERSION}/selenium-server-${SELENIUM_VERSION}.jar -O selenium-server.jar
 
+
+RUN apk add --no-cache tigervnc fluxbox xterm
+RUN apk add --no-cache tigervnc fluxbox xterm xorg-server
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /opt/selenium
 
@@ -39,6 +42,7 @@ RUN chmod +x entrypoint.sh
 
 # Expõe a porta do Appium (opcional, bom para debug)
 EXPOSE ${APPIUM_PORT}
+EXPOSE 5900
 
 # Define o script de inicialização como o ponto de entrada do contêiner
 ENTRYPOINT ["./entrypoint.sh"]

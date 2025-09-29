@@ -1,0 +1,4 @@
+default: --format pretty
+parallel: --tags '@appium or @cucumber or @android' --format pretty
+android: --tags '@android' --format pretty
+android_chrome: --tags '@android_chrome' --format pretty

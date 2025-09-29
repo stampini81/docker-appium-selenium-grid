@@ -17,6 +17,7 @@ services:
     # Opcional: bom para debug, permite conectar diretamente neste Appium
     ports:
       - "4724:4723" # Mapeia a porta interna 4723 do contêiner para a 4724 da sua máquina
+      - "5901:5900"  # Para o appium-node-1
 
   appium-node-2:
     build: ./appium-node
@@ -24,3 +25,20 @@ services:
       - selenium-hub
     ports:
       - "4725:4723" # Mapeia para a porta 4725 da sua máquina
+      - "5902:5900"  # Para o appium-node-2
+
+  appium-node-android:
+    build: ./appium-node-android
+    depends_on:
+      - selenium-hub
+    ports:
+      - "4726:4723" # Porta Appium Android
+      - "5903:5900" # Porta VNC Android
+    privileged: true
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    environment:
+      - ANDROID_HOME=/opt/android-sdk-linux
+      - ANDROID_SDK_ROOT=/opt/android-sdk-linux
+      - PATH=$PATH:/opt/android-sdk-linux/platform-tools
+      - APPIUM_ALLOW_INSECURE=chromedriver_autodownload
