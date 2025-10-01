@@ -1,0 +1,24 @@
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  appium-node-1:
+    build: ./appium-node
+    depends_on:
+      - selenium-hub
+    ports:
+      - "4724:4723"
+      - "5901:5900"
+
+  appium-node-2:
+    build: ./appium-node
+    depends_on:
+      - selenium-hub
+    ports:
+      - "4725:4723"
+      - "5902:5900"

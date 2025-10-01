@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Selenium Grid + Appium (non-Android) + Cucumber
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:24-dind
+        options: >-
+          --privileged
+        ports:
+          - 4442:4442
+          - 4443:4443
+          - 4444:4444
+          - 4724:4723
+          - 4725:4723
+        volumes:
+          - /var/lib/docker
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Start Selenium Grid + Appium (CI compose)
+        run: |
+          docker compose -f docker-compose.ci.yml build
+          docker compose -f docker-compose.ci.yml up -d
+
+      - name: Wait for Selenium Grid to be ready
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:4444/status | jq -e '.value.ready' >/dev/null 2>&1; then
+              echo "Selenium Grid is ready"; break; fi; sleep 2; done
+          curl -fsS http://localhost:4444/status || (echo "Grid not ready" && exit 1)
+
+      - name: Wait for Appium node 1 to be ready
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:4724/status | jq -e '.value.build' >/dev/null 2>&1; then
+              echo "Appium node 1 is ready"; break; fi; sleep 2; done
+          curl -fsS http://localhost:4724/status || (echo "Appium not ready" && exit 1)
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Run Cucumber (exclude Android tags)
+        env:
+          # Garante que os testes padrão apontem para o Grid local
+          SELENIUM_GRID_URL: http://localhost:4444/wd/hub
+        run: |
+          bundle exec cucumber --tags 'not @android and not @android_chrome' --publish-quiet
+
+      - name: Docker logs on failure
+        if: failure()
+        run: |
+          docker compose -f docker-compose.ci.yml ps
+          docker compose -f docker-compose.ci.yml logs --no-color
+
+      - name: Shutdown services
+        if: always()
+        run: |
+          docker compose -f docker-compose.ci.yml down -v
