@@ -10,23 +10,31 @@ Before do |scenario|
   tags = scenario.source_tag_names
 
   if tags.include?('@android_chrome')
+    udid = ENV['ANDROID_UDID'] || ENV['ANDROID_DEVICE_NAME'] || "0084665686"
     caps = {
       platformName: "Android",
-      deviceName: "0084665686", # seu device real
+      deviceName: udid, # seu device real (pode ser substituído por ANDROID_UDID/ANDROID_DEVICE_NAME)
+      udid: udid,
       browserName: "Chrome",
       'appium:automationName': "uiautomator2",
-      'chromedriverExecutable': '/usr/local/bin/chromedriver140'
+      'chromedriverExecutable': '/usr/local/bin/chromedriver140',
+      'appium:adbExecTimeout': 120_000,
+      'appium:newCommandTimeout': 120
     }
 
     server_url = APPIUM_ANDROID_URL
 
   elsif tags.include?('@android')
+    udid = ENV['ANDROID_UDID'] || ENV['ANDROID_DEVICE_NAME'] || "0084665686"
     caps = {
       platformName: "Android",
-      deviceName: "0084665686", # seu device real
+      deviceName: udid, # seu device real (pode ser substituído por ANDROID_UDID/ANDROID_DEVICE_NAME)
+      udid: udid,
       'appium:automationName': "uiautomator2",
       appPackage: "com.google.android.calculator",
-      appActivity: "com.android.calculator2.Calculator"
+      appActivity: "com.android.calculator2.Calculator",
+      'appium:adbExecTimeout': 120_000,
+      'appium:newCommandTimeout': 120
     }
     server_url = GRID_URL
 
