@@ -11,23 +11,14 @@ jobs:
     name: Selenium Grid + Appium (non-Android) + Cucumber
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:24-dind
-        options: >-
-          --privileged
-        ports:
-          - 4442:4442
-          - 4443:4443
-          - 4444:4444
-          - 4724:4723
-          - 4725:4723
-        volumes:
-          - /var/lib/docker
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Show Docker info
+        run: |
+          docker version
+          docker info
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -41,21 +32,21 @@ jobs:
       - name: Install tools (jq)
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq
+          sudo apt-get install -y jq curl
 
       - name: Wait for Selenium Grid to be ready
         run: |
           for i in {1..60}; do
-            if curl -fsS http://localhost:4444/status | jq -e '.value.ready' >/dev/null 2>&1; then
+            if curl -fsS http://localhost:54444/status | jq -e '.value.ready' >/dev/null 2>&1; then
               echo "Selenium Grid is ready"; break; fi; sleep 2; done
-          curl -fsS http://localhost:4444/status || (echo "Grid not ready" && exit 1)
+          curl -fsS http://localhost:54444/status || (echo "Grid not ready" && exit 1)
 
       - name: Wait for Appium node 1 to be ready
         run: |
           for i in {1..60}; do
-            if curl -fsS http://localhost:4724/status | jq -e '.value.build' >/dev/null 2>&1; then
+            if curl -fsS http://localhost:54724/status | jq -e '.value.build' >/dev/null 2>&1; then
               echo "Appium node 1 is ready"; break; fi; sleep 2; done
-          curl -fsS http://localhost:4724/status || (echo "Appium not ready" && exit 1)
+          curl -fsS http://localhost:54724/status || (echo "Appium not ready" && exit 1)
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -65,8 +56,7 @@ jobs:
 
       - name: Run Cucumber (exclude Android tags)
         env:
-          # Garante que os testes padrão apontem para o Grid local
-          SELENIUM_GRID_URL: http://localhost:4444/wd/hub
+          SELENIUM_GRID_URL: http://localhost:54444/wd/hub
         run: |
           bundle exec cucumber --tags 'not @android and not @android_chrome' --publish-quiet
 

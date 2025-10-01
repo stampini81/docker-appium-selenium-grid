@@ -3,16 +3,17 @@ services:
     image: selenium/hub:latest
     container_name: selenium-hub
     ports:
-      - "4442:4442"
-      - "4443:4443"
-      - "4444:4444"
+      # Bind to non-standard host ports to avoid conflicts in shared CI runners
+      - "54442:4442"
+      - "54443:4443"
+      - "54444:4444"
 
   appium-node-1:
     build: ./appium-node
     depends_on:
       - selenium-hub
     ports:
-      - "4724:4723"
+      - "54724:4723"
       - "5901:5900"
 
   appium-node-2:
@@ -20,5 +21,5 @@ services:
     depends_on:
       - selenium-hub
     ports:
-      - "4725:4723"
+      - "54725:4723"
       - "5902:5900"
