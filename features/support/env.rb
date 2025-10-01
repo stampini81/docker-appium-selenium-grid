@@ -1,5 +1,10 @@
 require 'appium_lib'
 
+# Allow overriding endpoints via environment variables (useful for CI)
+# Defaults match local docker-compose ports
+GRID_URL = ENV['SELENIUM_GRID_URL'] || 'http://localhost:4444/wd/hub'
+APPIUM_ANDROID_URL = ENV['APPIUM_ANDROID_URL'] || 'http://localhost:4726'
+
 Before do |scenario|
   require 'tmpdir'
   tags = scenario.source_tag_names
@@ -13,7 +18,7 @@ Before do |scenario|
       'chromedriverExecutable': '/usr/local/bin/chromedriver140'
     }
 
-    server_url = "http://localhost:4726"
+    server_url = APPIUM_ANDROID_URL
 
   elsif tags.include?('@android')
     caps = {
@@ -23,7 +28,7 @@ Before do |scenario|
       appPackage: "com.google.android.calculator",
       appActivity: "com.android.calculator2.Calculator"
     }
-    server_url = "http://localhost:4444/wd/hub"
+    server_url = GRID_URL
 
   else
     user_data_dir = Dir.mktmpdir("chrome-profile-")
@@ -42,7 +47,7 @@ Before do |scenario|
         args: chrome_args
       }
     }
-    server_url = "http://localhost:4444/wd/hub"
+    server_url = GRID_URL
   end
 
   opts = {

@@ -57,6 +57,7 @@ jobs:
       - name: Run Cucumber (exclude Android tags)
         env:
           SELENIUM_GRID_URL: http://localhost:54444/wd/hub
+          APPIUM_ANDROID_URL: http://localhost:54726
         run: |
           bundle exec cucumber --tags 'not @android and not @android_chrome' --publish-quiet
 
