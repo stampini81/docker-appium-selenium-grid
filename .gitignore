@@ -1,0 +1,33 @@
+# Arquivos de relatório gerados
+*.html
+relatorio.html
+report.html
+
+# Arquivos temporários
+window_dump.xml
+
+# Logs
+*.log
+
+# Arquivos do Docker
+.docker/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos do Ruby/Bundler
+.bundle/
+vendor/bundle/
+
+# Arquivos temporários do editor
+*.swp
+*.swo
+*~
+
+# Node modules (se houver)
+node_modules/
+
+# Screenshots e videos de teste
+screenshots/
+videos/

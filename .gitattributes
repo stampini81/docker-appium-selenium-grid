@@ -1,0 +1,31 @@
+# Normalize text files to LF in repo
+* text=auto eol=lf
+
+# Keep Windows scripts with CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Force LF for unixy files
+*.sh text eol=lf
+*.rb text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+Dockerfile text eol=lf
+*.feature text eol=lf
+Gemfile text eol=lf
+Gemfile.lock text eol=lf
+
+# Binaries
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.jar binary
+chromedriver-linux64/chromedriver binary
+
+# Certs/keys as text with LF
+*.crt text eol=lf
+*.pem text eol=lf
