@@ -36,6 +36,12 @@ jobs:
         run: |
           docker compose -f docker-compose.ci.yml build
           docker compose -f docker-compose.ci.yml up -d
+          sleep 5
+
+      - name: Install tools (jq)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
 
       - name: Wait for Selenium Grid to be ready
         run: |
