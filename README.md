@@ -1,5 +1,7 @@
 # Execução de Testes Android e Google Chrome via Selenium Grid (Docker + Appium + Cucumber)
 
+[![CI](https://github.com/stampini81/docker-appium-selenium-grid/actions/workflows/ci.yml/badge.svg)](https://github.com/stampini81/docker-appium-selenium-grid/actions/workflows/ci.yml)
+
 ## Pré-requisitos
 
 - **Windows 10/11** com WSL2 habilitado
